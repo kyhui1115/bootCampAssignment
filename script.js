@@ -10,6 +10,22 @@ function calculate(n1, operator, n2) {
   let result = 0;
   // TODO : n1과 n2를 operator에 따라 계산하는 함수를 만드세요.
   // ex) 입력값이 n1 : '1', operator : '+', n2 : '2' 인 경우, 3이 리턴됩니다.
+  if(operator === '+') {
+    result = Number(n1) + Number(n2);
+  }
+
+  else if(operator === '-') {
+    result = Number(n1) - Number(n2);
+  }
+
+  else if(operator === '*') {
+    result = Number(n1) * Number(n2);
+  }
+
+  else if(operator === '/') {
+    result = Number(n1) / Number(n2);
+  }
+
   return String(result);
 }
 
@@ -27,10 +43,21 @@ buttons.addEventListener('click', function (event) {
     if (action === 'number') {
       // 그리고 버튼의 클레스가 number이면
       // 아래 코드가 작동됩니다.
+      if(firstOperend.textContent === '0') {
+        firstOperend.textContent = buttonContent
+      }
+
+      else if(buttonContent !== '0') {
+        buttonContent === '0'
+        secondOperend.textContent = buttonContent
+      }
+
       console.log('숫자 ' + buttonContent + ' 버튼');
     }
 
     if (action === 'operator') {
+        operator.textContent = buttonContent
+
       console.log('연산자 ' + buttonContent + ' 버튼');
     }
 
@@ -39,10 +66,17 @@ buttons.addEventListener('click', function (event) {
     }
 
     if (action === 'clear') {
+      firstOperend.textContent = '0';
+      operator.textContent = '+';
+      secondOperend.textContent = '0';
+      calculatedResult.textContent = '0';
+
       console.log('초기화 버튼');
     }
 
     if (action === 'calculate') {
+      calculatedResult.textContent = calculate(firstOperend.textContent, operator.textContent, secondOperend.textContent)
+
       console.log('계산 버튼');
     }
   }
