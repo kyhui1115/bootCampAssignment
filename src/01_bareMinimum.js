@@ -10,7 +10,7 @@
 // _.identity는 전달인자(argument)가 무엇이든, 그대로 리턴합니다.
 // 이 함수는 underbar의 기능 구현 및 테스트를 위해 재사용되는 함수입니다.
 _.identity = function (val) {
-  // TODO: 여기에 코드를 작성합니다.
+  return val
 };
 
 /**
@@ -111,14 +111,20 @@ _.slice = function (arr, start, end) {
 // n이 undefined이거나 음수인 경우, 빈 배열을 리턴합니다.
 // n이 배열의 길이를 벗어날 경우, 전체 배열을 shallow copy한 새로운 배열을 리턴합니다.
 _.take = function (arr, n) {
-  // TODO: 여기에 코드를 작성합니다.
+  if(n === undefined) {
+    return [];
+  }
+
+  else {
+    return _.slice(arr, 0, n);
+  }
 };
 
 // _.drop는 _.take와는 반대로, 처음 n개의 element를 제외한 새로운 배열을 리턴합니다.
 // n이 undefined이거나 음수인 경우, 전체 배열을 shallow copy한 새로운 배열을 리턴합니다.
 // n이 배열의 길이를 벗어날 경우, 빈 배열을 리턴합니다.
 _.drop = function (arr, n) {
-  // TODO: 여기에 코드를 작성합니다.
+  return _.slice(arr, n, arr.length);
 };
 
 // _.last는 배열의 마지막 n개의 element를 담은 새로운 배열을 리턴합니다.
@@ -126,7 +132,15 @@ _.drop = function (arr, n) {
 // n이 배열의 길이를 벗어날 경우, 전체 배열을 shallow copy한 새로운 배열을 리턴합니다.
 // _.take와 _.drop 중 일부 또는 전부를 활용할 수 있습니다.
 _.last = function (arr, n) {
-  // TODO: 여기에 코드를 작성합니다.
+  if(n === undefined || n < 0) {
+    return _.drop(arr, arr.length - 1)
+  }
+  else if(n > arr.length) {
+    return _.slice(arr, 0)
+  }
+  else {
+    return _.drop(arr, arr.length - n)
+  }
 };
 
 // _.each는 collection의 각 데이터에 반복적인 작업을 수행합니다.
@@ -159,7 +173,17 @@ _.last = function (arr, n) {
 
 // _.each는 명시적으로 어떤 값을 리턴하지 않습니다.
 _.each = function (collection, iteratee) {
-  // TODO: 여기에 코드를 작성합니다.
+  if(Array.isArray(collection) === true) {
+    for(let n = 0; n < collection.length; n++) {
+      iteratee(collection[n], n, collection);
+    }
+  }
+  
+  else {
+    for(let i in collection) {
+      iteratee(collection[i], i, collection);
+    }
+  }
 };
 
 // _.indexOf는 target으로 전달되는 값이 arr의 요소인 경우, 배열에서의 위치(index)를 리턴합니다.
@@ -184,25 +208,58 @@ _.indexOf = function (arr, target) {
 // test(element)의 결과(return 값)가 truthy일 경우, 통과입니다.
 // test 함수는 각 요소에 반복 적용됩니다.
 _.filter = function (arr, test) {
-  // TODO: 여기에 코드를 작성합니다.
+  let result = []
+
+  _.each(arr, function(value) {
+    if(!test(value) === false) {
+      result.push(value)
+    }
+  });
+
+  return result
 };
+
+// const test = function (num) {
+//   return num % 2 === 0;
+// };
 
 // _.reject는 _.filter와 정반대로 test 함수를 통과하지 않는 모든 요소를 담은 새로운 배열을 리턴합니다.
 _.reject = function (arr, test) {
-  // TODO: 여기에 코드를 작성합니다.
+  let result = []
+
+  _.each(arr, function(value) {
+    if(!test(value) === true) {
+      result.push(value)
+    }
+  });
+
+  return result
 };
 
 // _.uniq는 주어진 배열의 요소가 중복되지 않도록 새로운 배열을 리턴합니다.
 // 중복 여부의 판단은 엄격한 동치 연산(strict equality, ===)을 사용해야 합니다.
 // 입력으로 전달되는 배열의 요소는 모두 primitive value라고 가정합니다.
 _.uniq = function (arr) {
-  // TODO: 여기에 코드를 작성합니다.
+  let result = []
+
+  _.each(arr, function(value, index) {
+    if(_.indexOf(arr, value) === index) {
+      result.push(value)
+    }
+  })
+
+  return result
 };
 
 // _.map은 iteratee(반복되는 작업)를 배열의 각 요소에 적용(apply)한 결과를 담은 새로운 배열을 리턴합니다.
 // 함수의 이름에서 드러나듯이 _.map은 배열의 각 요소를 다른 것(iteratee의 결과)으로 매핑(mapping)합니다.
 _.map = function (arr, iteratee) {
-  // TODO: 여기에 코드를 작성합니다.
+  let result = []
+
+  _.each(arr, function(value) {
+    result.push(iteratee(value))
+  })
+  return result
   // _.map 함수는 매우 자주 사용됩니다.
   // _.each 함수와 비슷하게 동작하지만, 각 요소에 iteratee를 적용한 결과를 리턴합니다.
 };
@@ -223,6 +280,12 @@ _.pluck = function (arr, keyOrIdx) {
   // return result;
   // _.pluck은 _.map을 사용해 구현하시기 바랍니다.
   // TODO: 여기에 코드를 작성합니다.
+  let result = []
+
+  _.map(arr, function(item) {
+      result.push(item[keyOrIdx])
+    })
+  return result
 };
 
 // _.reduce는
@@ -273,6 +336,25 @@ _.pluck = function (arr, keyOrIdx) {
 //  }, 2); // 초기 값이 2로 주어졌습니다. 첫 번째 요소부터 반복 작업이 시작됩니다.
 //         // 2 + 3 * 3 = 11; (첫 작업의 결과가 누적되어 다음 작업으로 전달됩니다.)
 //         // 11 + 5 * 5 = 36; (마지막 작업이므로 최종적으로 36이 리턴됩니다.)
+
+// arr = [1, 2, 3 , 4],
+// iteratee 
+// = function (left, item) {
+//    orderTraversed.push(item);
+//    return left - item;
+//   }
+// initVal = 12
 _.reduce = function (arr, iteratee, initVal) {
   // TODO: 여기에 코드를 작성합니다.
+  let accumulator = initVal;
+
+  _.each(arr, function (item, idx, src) {
+    if (initVal === undefined && idx === 0) {
+      accumulator = item;
+    } else {
+      accumulator = iteratee(accumulator, item, idx, src);
+    }
+  });
+
+  return accumulator;
 };
