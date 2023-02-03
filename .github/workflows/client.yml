@@ -28,8 +28,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_EC2_METADATA_DISABLED: true
         run: |
-          aws s3 <?> \
+          aws s3 fe-29-kyhui1115-s3 \
             --region ap-northeast-2 \
-            build s3://<?> \
+            build s3://fe-29-kyhui1115-s3 \
             --delete
         working-directory: ./my-agora-states-client
